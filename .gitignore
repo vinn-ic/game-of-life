@@ -1,4 +1,4 @@
 build
-CmakeLists.txt
+CMakeLists.txt
 compile_commands.json
 .cache
