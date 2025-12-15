@@ -141,10 +141,10 @@ int main(int argc, char *argv[]) {
       matriz2[x][y] = 1;
     }
   }
-  matriz2[10][1] = 1;
-  matriz2[10][2] = 1;
-  matriz2[11][1] = 1;
-  matriz2[11][2] = 1;
+  // matriz2[10][1] = 1;
+  // matriz2[10][2] = 1;
+  // matriz2[11][1] = 1;
+  // matriz2[11][2] = 1;
 
   gtk_init(&argc, &argv);
 
