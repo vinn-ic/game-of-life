@@ -6,15 +6,15 @@
 #include <gtk/gtk.h>
 #include <stdio.h>
 
-#define WINDOW_X 1302
-#define WINDOW_Y 700
+#define WINDOW_X 1312
+#define WINDOW_Y 710
 
-#define SIZE 2
-#define BORDER 0
-#define TIME 50
+#define SIZE 3
+#define BORDER 1
+#define TIME 100
 
-#define BLOCK_X WINDOW_X / SIZE
-#define BLOCK_Y WINDOW_Y / SIZE
+#define BLOCK_X WINDOW_X / (SIZE + BORDER)
+#define BLOCK_Y WINDOW_Y / (SIZE + BORDER)
 
 int matriz[BLOCK_X][BLOCK_Y];
 int matriz2[BLOCK_X][BLOCK_Y];
