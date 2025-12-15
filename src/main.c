@@ -5,42 +5,40 @@
 #include "glibconfig.h"
 #include <gtk/gtk.h>
 #include <stdio.h>
-// #include <stdio.h>
-#define WINDOW_X 1162
-#define WINDOW_Y 650
-// 125
-// 105
-#define BLOCK_X WINDOW_X / 6
-#define BLOCK_Y WINDOW_Y / 6
+
+#define WINDOW_X 1302
+#define WINDOW_Y 700
+
+#define SIZE 2
+#define BORDER 0
+#define TIME 50
+
+#define BLOCK_X WINDOW_X / SIZE
+#define BLOCK_Y WINDOW_Y / SIZE
 
 int matriz[BLOCK_X][BLOCK_Y];
 int matriz2[BLOCK_X][BLOCK_Y];
-// a celula continua viva com 2 ou 3 outras celular ao redor (==2 || ==3)
-// a celular morre com menos menos 2 ou mais de 3 (<2 || >3)
-// a celula morta ganha vida com exatamente 3 outras celulas vivas ao redor (==
-// 3)
+// a célula continua viva com 2 ou 3 outras celular ao redor (==2 || ==3)
+// a célula morre com menos menos 2 ou mais de 3 (<2 || >3)
+// célula morta ganha vida com exatamente 3 outras células vivas ao redor (==3)
 
 gboolean render(GtkWidget *widget, cairo_t *cr, gpointer data) {
-  int size = 5;
-  // blocos
-  // x = 35
-  // y = 57
 
   int counterX = 1;
   int counterY = 1;
 
-  for (int x = 10; x < WINDOW_X; x += (size + 1)) {
+  for (int x = 10; x < WINDOW_X; x += (SIZE + BORDER)) {
     counterY = 1;
 
-    for (int y = 10; y < WINDOW_Y; y += (size + 1)) {
+    for (int y = 10; y < WINDOW_Y; y += (SIZE + BORDER)) {
       if (matriz[counterX][counterY] == 1) {
         cairo_set_source_rgb(cr, 0, 0, 0);
-        cairo_rectangle(cr, x, y, size, size);
+        cairo_rectangle(cr, x, y, SIZE, SIZE);
         cairo_fill(cr);
 
       } else {
         cairo_set_source_rgb(cr, 1.0, 1.0, 1.0);
-        cairo_rectangle(cr, x, y, size, size);
+        cairo_rectangle(cr, x, y, SIZE, SIZE);
         cairo_fill(cr);
       }
       counterY++;
@@ -52,8 +50,8 @@ gboolean render(GtkWidget *widget, cairo_t *cr, gpointer data) {
 }
 
 int updateGen() {
-  for (int x = 1; x < BLOCK_X - 1; x++) {
-    for (int y = 1; y < BLOCK_Y - 1; y++) {
+  for (int x = 0; x < BLOCK_X; x++) {
+    for (int y = 0; y < BLOCK_Y; y++) {
       matriz2[x][y] = matriz[x][y];
     }
   }
@@ -88,6 +86,21 @@ int updateGen() {
       if (matriz[x + 1][y]) {
         counter += 1;
       }
+      //
+      if (x == 1) {
+        matriz2[x][y] = 0;
+      }
+      if (x == BLOCK_X - 1) {
+        matriz2[x][y] = 0;
+      }
+      if (y == 1) {
+        matriz2[x][y] = 0;
+      }
+      if (y == BLOCK_Y - 1) {
+        matriz2[x][y] = 0;
+      }
+
+      //
       if (matriz[x][y]) {
         if (counter > 3 || counter < 2) {
           matriz2[x][y] = 0;
@@ -103,10 +116,10 @@ int updateGen() {
 }
 
 gboolean updateGame(gpointer area) {
-  printf("começando o updateGen ......\n\n");
+  // printf("começando o updateGen ......\n\n");
   updateGen();
 
-  printf("updateGen ja rodou, començando o render....\n\n");
+  // printf("updateGen ja rodou, començando o render....\n\n");
   gtk_widget_queue_draw(area);
 
   for (int x = 0; x < BLOCK_X; x++) {
@@ -151,7 +164,7 @@ int main(int argc, char *argv[]) {
   g_signal_connect(area, "draw", G_CALLBACK(render), NULL);
 
   printf("iniciando o timeout......\n\n");
-  g_timeout_add(100, updateGame, area);
+  g_timeout_add(TIME, updateGame, area);
 
   gtk_widget_show_all(win);
   gtk_main();
